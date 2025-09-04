@@ -4,6 +4,8 @@ import { Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
+import { ToastContainer,toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -13,6 +15,7 @@ function App() {
     <>
 
     <div className="bg-[url('./src/assets/bgImage.svg')] bg-contain">
+    <ToastContainer/>
 
 
 

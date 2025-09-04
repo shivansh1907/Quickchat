@@ -13,7 +13,7 @@ const RightSidebar = ({selecteduser,setselecteduser}) => {
       }
   
   return (
-    <div className={`md:flex flex-col backdrop-blur-sm ${selecteduser?`block`:`hidden`} hidden `  }>
+    <div className={` md:flex border-l border-l-gray-500 flex-col backdrop-blur-sm hidden ${selecteduser?`flex`:`hidden`}  `  }>
 
         <div className={`flex flex-col h-[40%] items-center border-b gap-2 pt-3 border-b-gray-500 justify-center `}>
             <img className="max-w-20 rounded-full" src={selecteduser?selecteduser.profilePic:null} alt="" />
