@@ -37,7 +37,7 @@ const Sidebar = ({selecteduser,setselecteduser}) => {
     <div className="flex flex-col gap-6">
         {userDummyData.map((item,index)=>{
             return (
-                <div  key={index}  className="relative max-sm:text-sm flex items-center gap-2">
+                <div  key={index} onClick={()=>(setselecteduser(item))}  className={`relative max-sm:text-sm flex items-center gap-2 ${selecteduser?selecteduser._id==item._id?`bg-black`:`bg-transparent`:``}`}>
                     <img src={item.profilePic} className="w-10  rounded-full" alt="" />
                     <div className="flex flex-col">
                         <p className="text-2xs">{item.fullName}</p>
