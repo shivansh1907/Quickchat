@@ -13,10 +13,10 @@ const RightSidebar = ({selecteduser,setselecteduser}) => {
       }
   
   return (
-    <div className={` md:flex border-l border-l-gray-500 flex-col backdrop-blur-sm hidden ${selecteduser?`flex`:`hidden`}  `  }>
+     selecteduser? <div  className={` md:flex border-l border-l-gray-500 flex-col backdrop-blur-sm hidden ${selecteduser?`flex`:`hidden`}  `  }>
 
         <div className={`flex flex-col h-[40%] items-center border-b gap-2 pt-3 border-b-gray-500 justify-center `}>
-            <img className="max-w-20 rounded-full" src={selecteduser?selecteduser.profilePic:null} alt="" />
+            <img className="max-w-20 rounded-full" src={selecteduser?.profilePic || assets.avatar_icon} alt="" />
             <p className="text-white">{selecteduser?selecteduser.fullName:null}</p>
             <p className="text-white text-[10px]">Hey My name is <span className="text-white text-[10px]">{selecteduser?selecteduser.fullName:null}</span></p>
 
@@ -28,7 +28,7 @@ const RightSidebar = ({selecteduser,setselecteduser}) => {
             <button onClick={handleLogout} className="absolute  bg-purple-500 w-[80%] p-1 rounded-2xl text-white cursor-pointer bottom-8">Logout</button>
         </div>
       
-    </div>
+    </div>:<div></div>
   )
 }
 
