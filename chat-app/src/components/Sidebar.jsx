@@ -26,8 +26,9 @@ const Sidebar = ({selecteduser,setselecteduser}) => {
         </div>
 
         <div className="  flex gap-3 justify-between w-full items-center my-4 bg-[#282142] p-2 rounded-2xl">
-            <img src={assets.search_icon} className="max-w-3" alt="" />
-            <input type="text" placeholder="Search user..." className="bg-transparent border-none outline-none text-white text-xs placeholder-[#c8c8c8] flex-1" />
+            <label htmlFor="search"><img src={assets.search_icon} className="max-w-3" alt="" /></label>
+            
+            <input type="text" id="search" placeholder="Search user..." className="bg-transparent border-none outline-none text-white text-xs placeholder-[#c8c8c8] flex-1" />
         </div>
 
 
@@ -44,7 +45,7 @@ const Sidebar = ({selecteduser,setselecteduser}) => {
                         <p className="text-green-300 text-xs">online</p>
                     </div>
 
-                    {index>2 && <p className="absolute flex items-center justify-center bg-violet-500/50 w-7 h-7 rounded-full right-1">+{index}</p>
+                    {index>2 && <p className="absolute flex items-center justify-center bg-violet-500/50 w-6 h-6 rounded-full right-1">+{index}</p>
                     }
 
 

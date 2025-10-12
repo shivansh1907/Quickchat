@@ -4,9 +4,7 @@ import {connectDb} from "./db.js"
 import http from "http"
 import { Server } from "socket.io";
 
-export const io=new Server(server,{
-    cors:{origin:"*"}
-})
+
 
 
 
@@ -14,11 +12,38 @@ dotenv.config({
     path:'./.env'
 })
 
-//  const server = http.createServer(app);
+ const server = http.createServer(app);
+
+ export const io=new Server(server,{
+    cors:{origin:"*"}
+})
+
+//store online users
+export const userSocketMap={}; //userid:socketId
+
+//connection handlwr
+io.on("connection",(socket)=>{
+    const userId=socket.handshake.query.userId;
+    console.log("new connection established",socket.id);  
+    
+    if(userId){
+        userSocketMap[userId]=socket.id;
+    }
+
+    io.emit("get-online-users",Object.keys(userSocketMap))//return array of keys(userId) online users
+    socket.on("disconnect",()=>{
+        console.log("user disconnected",userId);
+        
+            delete userSocketMap[userId];
+            io.emit("get-onine-users",Object.keys(userSocketMap))
+        
+    })
+})
+
 
 connectDb()
 .then(()=>{
-    app.listen(process.env.PORT,()=>{
+    server.listen(process.env.PORT,()=>{
         console.log("database connection successful");
         
         console.log(`server is listenin on port  ${process.env.PORT}`);
