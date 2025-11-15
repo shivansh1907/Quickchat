@@ -1,6 +1,7 @@
 import { User } from "../models/user.model.js";
 import {generateToken} from "../utils/utils.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import bcrypt from "bcrypt"
 
 
 const registerUser=async(req,res)=>{
@@ -133,9 +134,12 @@ const updateProfile=async(req,res)=>{
         const {profilePic,bio,name}=req.body
         const userId=req.user._id;
         let updatedUser;
-        if(!profilePic)[
+        if(!profilePic){
+
+        
             updatedUser=await User.findByIdAndUpdate(userId,{name,bio},{new:true})
-        ]
+        }
+        
         else{
             const upload= await uploadOnCloudinary(profilePic)
             updatedUser=await User.findByIdAndUpdate(userId,{name,bio,profilePic:upload.url},{new:true})

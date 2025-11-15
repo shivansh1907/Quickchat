@@ -1,13 +1,32 @@
 import React from 'react'
 import assets, { userDummyData } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { AuthContext } from '../../context/context.jsx'
+import axios from 'axios'
+
+import { toast } from 'react-toastify'
 
 const Sidebar = ({selecteduser,setselecteduser}) => {
+    const {
+        authUser,
+        setauthUser,
+        token,
+        setToken,
+        onlineUsers,
+        setonlineUsers}=useContext(AuthContext)
     const navigate=useNavigate()
     const handleLogout=()=>{
+        localStorage.removeItem("token")
+   
+        setauthUser(null)
+        setToken(null)
+        setonlineUsers([])
 
 
         navigate("/login")
+        toast.success("Logged out successfully")
+        
 
     }
   return (

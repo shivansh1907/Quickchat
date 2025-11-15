@@ -4,6 +4,8 @@ import axios from "axios"
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 
+import { AuthContext } from '../../context/context.jsx'
+
 const Login = () => {
     const navigate=useNavigate()
     const url="http://localhost:8080"
@@ -13,6 +15,14 @@ const Login = () => {
         password:""
     })
     const [currstate,setcurrstate]=React.useState("Sign up")
+    const {axios,
+            authUser,
+            setauthUser,
+            connectSocket,
+            token,
+            setToken,
+            onlineUsers,
+            setonlineUsers}=React.useContext(AuthContext)
     const handleChange=(e)=>{
         const name=e.target.name;
         const value=e.target.value
@@ -20,9 +30,7 @@ const Login = () => {
         setdetails((prev)=>({...prev,[name]:value}))
     }
 
-    React.useEffect(()=>{
-        console.log(details)
-    },[details])
+
     const handleSubmit=async(e)=>{
          e.preventDefault()
         
@@ -43,6 +51,10 @@ const Login = () => {
 
     const response=await axios.post(`${newUrl}`,formData)
     if(response.data.success){
+      setauthUser(response.data.user)
+      axios.defaults.headers.common["token"]=response.data.token
+      connectSocket(response.data.user)
+      setToken(response.data.token)
   
       localStorage.setItem("token",response.data.token);
       setdetails({

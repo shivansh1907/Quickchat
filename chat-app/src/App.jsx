@@ -1,14 +1,16 @@
 import { useState } from 'react'
-import { Routes } from 'react-router-dom'
+import { Navigate, Routes } from 'react-router-dom'
 import { Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
 import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { useContext } from 'react'
+import { AuthContext } from '../context/context.jsx'
 
 function App() {
+  const {authUser}=useContext(AuthContext)
 
 
   return (
@@ -20,9 +22,9 @@ function App() {
 
 
     <Routes>
-      <Route path='/' element={<Home/>}/>
-       <Route path='/login' element={<Login/>}/>
-        <Route path='/profile' element={<Profile/>}/>
+      <Route path='/' element={authUser?<Home/>:<Navigate to="/login"  />}/>
+       <Route path='/login' element={!authUser ? <Login/>: <Navigate to="/" />}/>
+        <Route path='/profile' element={authUser? <Profile/>: <Navigate to="/login" />}/>
 
     </Routes>
 
