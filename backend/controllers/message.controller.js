@@ -1,9 +1,13 @@
-import { User } from "../models/user.model";
+import { User } from "../models/user.model.js";
 import { Message } from "../models/message.model.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import {io, userSocketMap} from "../index.js"
 
 const getUserforSidebar=async(req,res)=>{
     try {
+        console.log("req.user in get user for sidebar",req.user?._id)
         const users=await User.find({_id:{$ne:req.user._id}}).select("-password,")
+        console.log("users for sidebar",users)
          //count number ppf messages  not seen
        const unseenMessages={} 
        const promises=users.map(async(user)=>{
@@ -15,7 +19,7 @@ const getUserforSidebar=async(req,res)=>{
         await Promise.all(promises);
 
         return res.json({
-            success:"true",
+            success:true,
             users,
             unseenMessages
         })
@@ -36,7 +40,7 @@ const getUserforSidebar=async(req,res)=>{
 
 
 
-export const getMessages=async(req,res)=>{
+ const getMessages=async(req,res)=>{
    try {
      const {id:selectedUserId}=req.params;
      const myId=req.user._id;
@@ -65,7 +69,7 @@ export const getMessages=async(req,res)=>{
 }
 
 //api to mark message as  seen using messafgeId
-export const markMessageAsSeen=async(req,res)=>{
+ const markMessageAsSeen=async(req,res)=>{
     try {
         const {id}=req.params;
         await Message.findByIdAndUpdate(
@@ -78,6 +82,7 @@ export const markMessageAsSeen=async(req,res)=>{
         )
 
         return res.json({success:true})
+    
 
         
     } catch (error) {
@@ -89,5 +94,44 @@ export const markMessageAsSeen=async(req,res)=>{
         
     }
 }
+   const sendMessage=async(req,res)=>{
+    try {
+        const {text,image}=req.body
+        const recieverId=req.params.id;
+        const senderId=req.user._id;
+        if(!text && !image){
+            return res.status(400).json({success:false})  
+        }
 
-export {getUserforSidebar,getMessages,markMessageAsSeen}
+        let imageurl;
+
+        if(image){
+            const upload=await uploadOnCloudinary(image)
+            imageurl=upload.url
+        }
+        const message=await Message.create({
+            senderId,
+            recieverId,
+            text,
+            image:imageurl
+        })
+        const recieverSocketId=userSocketMap[recieverId]
+        if(recieverSocketId){
+            io.to(recieverSocketId).emit("new-message",message)
+        }
+        return res.status(200).json({
+            success:true,
+            message
+        })
+       
+        
+    } catch (error) {
+        console.log("error in send message controller",error)   
+        return res.json({success:false,message:"internal server error"})
+        
+    }
+}
+
+
+
+export {getUserforSidebar,getMessages,markMessageAsSeen,sendMessage}

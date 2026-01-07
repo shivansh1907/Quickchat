@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import { AuthProvider } from '../context/context.jsx'
-import { chatContextProvider } from '../chatContext/chatContext.jsx'
+import { ChatContextProvider } from '../chatContext/chatContext.jsx'
 
 
 createRoot(document.getElementById('root')).render(
@@ -14,9 +14,9 @@ createRoot(document.getElementById('root')).render(
 
     <BrowserRouter>
     <AuthProvider>
-        <chatContextProvider>
+        <ChatContextProvider>
     <App />
-    </chatContextProvider>
+       </ChatContextProvider>
     </AuthProvider>
     </BrowserRouter>
  

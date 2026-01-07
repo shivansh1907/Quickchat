@@ -3,9 +3,9 @@ import { createContext } from 'react'
 import { AuthContext } from '../context/context.jsx'
 import { toast } from 'react-toastify'
 import { useEffect } from 'react'
-export const chatContext=createContext()
+export const ChatContext=createContext()
 
-export const chatContextProvider = ({children}) => {
+export const ChatContextProvider = ({children}) => {
     const [messages,setmessages]=React.useState([])
     const [users,setusers]=React.useState([])// well store users for left sidebar
     const [selectedUser,setselectedUser]=React.useState(null)//we'll store id of user to whom we want to chat
@@ -17,6 +17,7 @@ export const chatContextProvider = ({children}) => {
     const fetchUser=async()=>{
         try {
             const response=await axios.get("/api/message/sidebar")
+            console.log("response from fetch user sidebar",response.data)
             if(response.data.success){
                 setusers(response.data.users)
                 setunseenMessages(response.data.unseenMessages)
@@ -86,7 +87,7 @@ export const chatContextProvider = ({children}) => {
     
 
     
-    value={
+    const value={
         messages,
         setmessages,
         users,  
@@ -104,12 +105,12 @@ export const chatContextProvider = ({children}) => {
 
     }
   return (
-    <chatContext.Provider value={value}>
+    <ChatContext.Provider value={value}>
         {children}
-    </chatContext.Provider>
+    </ChatContext.Provider>
       
 
   )
 }
 
-export default chatContext
+

@@ -24,5 +24,8 @@ import { userRouter } from "./routes/user.route.js";
 
 app.use("/api/user",userRouter);
 
+import  messageRouter  from "./routes/message.route.js";
+app.use("/api/message",messageRouter);  
+
 
 export {app}

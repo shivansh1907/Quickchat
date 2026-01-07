@@ -39,6 +39,11 @@ io.on("connection",(socket)=>{
         
     })
 })
+import { userRouter } from "./routes/user.route.js";
+
+
+
+
 
 
 connectDb()

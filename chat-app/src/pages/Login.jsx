@@ -52,7 +52,9 @@ const Login = () => {
     const response=await axios.post(`${newUrl}`,formData)
     if(response.data.success){
       setauthUser(response.data.user)
-      axios.defaults.headers.common["token"]=response.data.token
+     axios.defaults.headers.common["Authorization"] =
+  `Bearer ${response.data.token}`;
+
       connectSocket(response.data.user)
       setToken(response.data.token)
   
@@ -62,7 +64,7 @@ const Login = () => {
         email:"",
         password:""
       })
-   toast.success("Account created successfully")
+   toast.success(response.data.message)
    setTimeout(()=>{
     navigate("/")
    },1000)
@@ -90,7 +92,7 @@ const Login = () => {
             <input onChange={handleChange} name="email" value={details.email} type="email" placeholder='Email Address' className="bg-transparent border-1 text-white border-gray-500 rounded-sm placeholder-[#867e7e] p-1 " />
             <input  onChange={handleChange} name="password" value={details.password} type="password" placeholder='Password' className="bg-transparent border-1 border-gray-500 text-white rounded-sm placeholder-[#867e7e] p-1 " />
 
-          <button className="bg-purple-500 text-white text-[15px] rounded-sm p-2">Create Account</button>
+          <button className="bg-purple-500 text-white text-[15px] rounded-sm p-2">{currstate==="Sign up"?"Create Account":"Login"}</button>
 
           <div className="flex gap-2 items-center">
             <input type="radio" className="appearance-none w-3 h-3 border border-gray-400 rounded-sm checked:bg-violet-500 checked:border-blue-500" />

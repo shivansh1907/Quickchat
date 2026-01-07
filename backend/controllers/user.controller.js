@@ -131,21 +131,19 @@ const registerUser=async(req,res)=>{
 
 const updateProfile=async(req,res)=>{
     try {
-        const {profilePic,bio,name}=req.body
+        const {bio,name}=req.body
+       
         const userId=req.user._id;
+        console.log("user id in update profile",userId)
         let updatedUser;
-        if(!profilePic){
+        if(name || bio){
 
         
             updatedUser=await User.findByIdAndUpdate(userId,{name,bio},{new:true})
         }
         
-        else{
-            const upload= await uploadOnCloudinary(profilePic)
-            updatedUser=await User.findByIdAndUpdate(userId,{name,bio,profilePic:upload.url},{new:true})
-        }
-
-        res.json({success:true,user:updatedUser})
+      
+        res.status(201).json({success:true,user:updatedUser})
 
         
     } catch (error) {

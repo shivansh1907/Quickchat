@@ -10,7 +10,7 @@ const messageRouter=express.Router();
 messageRouter.get("/sidebar",protectedRoute,getUserforSidebar)
 
 messageRouter.get("/:id",protectedRoute,getMessages)
-messageRouter.put("mark/:id",protectedRoute,markMessageAsSeen)
-messaggeRouter.post("/send/:id",protectedRoute,sendMessage)
+messageRouter.put("/mark/:id",protectedRoute,markMessageAsSeen)
+messageRouter.post("/send/:id",protectedRoute,sendMessage)
 
 export default messageRouter
