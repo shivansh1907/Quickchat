@@ -24,22 +24,27 @@ export const userSocketMap={}; //userid:socketId
 //connection handlwr
 io.on("connection",(socket)=>{
     const userId=socket.handshake.query.userId;
+    console.log(userId)
     console.log("new connection established",socket.id);  
     
     if(userId){
         userSocketMap[userId]=socket.id;
     }
+    console.log("userSocketMap",userSocketMap);
 
-    io.emit("get-online-users",Object.keys(userSocketMap))//return array of keys(userId) online users
+    const onlineUsers=Object.keys(userSocketMap);
+    console.log("online users",onlineUsers);
+
+    io.emit("get-online-users",onlineUsers)//return array of keys(userId) online users
     socket.on("disconnect",()=>{
         console.log("user disconnected",userId);
         
             delete userSocketMap[userId];
-            io.emit("get-onine-users",Object.keys(userSocketMap))
+            io.emit("get-online-users",Object.keys(userSocketMap))
         
     })
 })
-import { userRouter } from "./routes/user.route.js";
+
 
 
 

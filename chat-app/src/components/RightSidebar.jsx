@@ -6,19 +6,29 @@ import assets from '../assets/assets.js';
 
 
 import { AuthContext } from '../../context/context.jsx';
+import { toast } from 'react-toastify';
+
 
 
 
 const RightSidebar = () => {
 
-  const {authUser,onlineUsers}=React.useContext(AuthContext)
+  const {authUser,setauthUser,onlineUsers,setonlineUsers,setToken}=React.useContext(AuthContext)
 const {selectedUser,setselectedUser}=React.useContext(ChatContext)
 
       const navigate=useNavigate();
 
       const handleLogout=()=>{
 
+        localStorage.removeItem("token")
+        setselectedUser(null)
+        setauthUser(null)
+          setToken(null)
+        setonlineUsers([])
+        
+
         navigate("/login")
+        toast.success("Logged out successfully")
       }
   
   return (
@@ -28,7 +38,7 @@ const {selectedUser,setselectedUser}=React.useContext(ChatContext)
             <img className="max-w-20 rounded-full" src={selectedUser?.profilePic || assets.avatar_icon} alt="" />
             <p className="text-white">{selectedUser.name}</p>
             <p className="text-white text-[10px]">Hey My name is <span className="text-white text-[10px]">{selectedUser.name}</span></p>
-            <p>{selectedUser.bio}</p>
+            <p className={`text-white text-[10px] ${selectedUser.bio?"block":"hidden"}`}>{selectedUser.bio}</p>
 
         </div>
 

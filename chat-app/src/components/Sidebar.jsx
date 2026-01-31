@@ -9,13 +9,19 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import {ChatContext} from '../../chatContext/chatContext.jsx'
 
+
+
 const Sidebar = () => {
 
     const {
         authUser,
         setauthUser,
+        connectSocket,
         token,
+        socket,
+        setSocket,
         setToken,
+        checkAuth,
         onlineUsers,
         setonlineUsers}=useContext(AuthContext)
 
@@ -35,10 +41,15 @@ const Sidebar = () => {
 }=useContext(ChatContext)
 
     useEffect(()=>{
+
+
+      
      
 
-        fetchUser()
-    },[])
+      
+        
+        fetchUser();
+    },[onlineUsers])
 
     const [input,setinput]=React.useState(false)
 
@@ -47,6 +58,7 @@ const Sidebar = () => {
 
         setselectedUser(user)
         getmesssagesforSelectedUser(user._id)
+       
     }
    
    
@@ -58,16 +70,24 @@ const Sidebar = () => {
 
 
     const navigate=useNavigate()
-    const handleLogout=()=>{
-        localStorage.removeItem("token")
-   
-        setauthUser(null)
-        setToken(null)
-        setonlineUsers([])
+    const handleLogout=async ()=>{
+         localStorage.removeItem("token");
 
+         if(socket){
 
-        navigate("/login")
-        toast.success("Logged out successfully")
+         console.log("socket before disconnect",socket)
+         
+            socket.disconnect();
+            setSocket(null);
+
+         }
+     
+    setToken(null);
+    setauthUser(null);
+    setonlineUsers([]);
+    axios.defaults.headers.common["token"] = null;
+    toast.success("Logged out successfully");
+      
         
 
     }

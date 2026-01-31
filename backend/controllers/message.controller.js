@@ -5,9 +5,9 @@ import {io, userSocketMap} from "../index.js"
 
 const getUserforSidebar=async(req,res)=>{
     try {
-        console.log("req.user in get user for sidebar",req.user?._id)
+      
         const users=await User.find({_id:{$ne:req.user._id}}).select("-password,")
-        console.log("users for sidebar",users)
+        
          //count number ppf messages  not seen
        const unseenMessages={} 
        const promises=users.map(async(user)=>{
@@ -99,6 +99,8 @@ const getUserforSidebar=async(req,res)=>{
         const {text,image}=req.body
         const recieverId=req.params.id;
         const senderId=req.user._id;
+
+        console.log("reciever id",recieverId)
         if(!text && !image){
             return res.status(400).json({success:false})  
         }
@@ -116,9 +118,11 @@ const getUserforSidebar=async(req,res)=>{
             image:imageurl
         })
         const recieverSocketId=userSocketMap[recieverId]
+        console.log("reciever socket id",recieverSocketId)
         if(recieverSocketId){
             io.to(recieverSocketId).emit("new-message",message)
         }
+        console.log(message)
         return res.status(200).json({
             success:true,
             message

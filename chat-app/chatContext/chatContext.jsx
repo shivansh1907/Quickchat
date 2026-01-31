@@ -5,7 +5,11 @@ import { toast } from 'react-toastify'
 import { useEffect } from 'react'
 export const ChatContext=createContext()
 
+
+
 export const ChatContextProvider = ({children}) => {
+
+    const {checkAuth}=React.useContext(AuthContext)
     const [messages,setmessages]=React.useState([])
     const [users,setusers]=React.useState([])// well store users for left sidebar
     const [selectedUser,setselectedUser]=React.useState(null)//we'll store id of user to whom we want to chat
@@ -17,7 +21,7 @@ export const ChatContextProvider = ({children}) => {
     const fetchUser=async()=>{
         try {
             const response=await axios.get("/api/message/sidebar")
-            console.log("response from fetch user sidebar",response.data)
+           
             if(response.data.success){
                 setusers(response.data.users)
                 setunseenMessages(response.data.unseenMessages)
@@ -44,6 +48,7 @@ export const ChatContextProvider = ({children}) => {
         try {
          const response=await axios.post(`/api/message/send/${selectedUser._id}`,text)
          if(response.data.success){
+            console.log("hello")
             setmessages((prev)=>[...prev,response.data.message])
          }
             else{
@@ -60,6 +65,7 @@ export const ChatContextProvider = ({children}) => {
     const subscribeToMessages=()=>{
         if(!socket)return;
         socket.on("new-message",(messageData)=>{
+            console.log("new message data from socket",messageData)
             if(selectedUser && messageData.senderId===selectedUser._id){
                 messageData.seen=true
                 setmessages((prev)=>[...prev,messageData])      
@@ -79,9 +85,11 @@ export const ChatContextProvider = ({children}) => {
     }
 
     useEffect(()=>{
+      
         subscribeToMessages()   
         return ()=>unsubscribeFromMessages()
-    })
+        
+    },[socket,selectedUser])
 
 
     

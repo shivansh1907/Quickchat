@@ -10,10 +10,11 @@ import { useContext } from 'react'
 import { AuthContext } from '../context/context.jsx'
 
 function App() {
-  const {authUser}=useContext(AuthContext)
+  const {authUser,token}=useContext(AuthContext)
 
 
   return (
+    
     <>
 
     <div className="bg-[url('./src/assets/bgImage.svg')] bg-contain">

@@ -65,9 +65,7 @@ const Login = () => {
         password:""
       })
    toast.success(response.data.message)
-   setTimeout(()=>{
-    navigate("/")
-   },1000)
+ 
      
     }
     else{
@@ -95,7 +93,7 @@ const Login = () => {
           <button className="bg-purple-500 text-white text-[15px] rounded-sm p-2">{currstate==="Sign up"?"Create Account":"Login"}</button>
 
           <div className="flex gap-2 items-center">
-            <input type="radio" className="appearance-none w-3 h-3 border border-gray-400 rounded-sm checked:bg-violet-500 checked:border-blue-500" />
+            <input type="radio" required className="appearance-none w-3 h-3 border border-gray-400 rounded-sm checked:bg-violet-500 checked:border-blue-500" />
             <p className="text-[#ab9b9b] text-[12px]">Agree to terms of use & privacy policy</p>
           </div>
 

@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import { useEffect } from "react";
 import { useState } from "react";
 import { createContext } from "react";
@@ -7,7 +8,8 @@ import { io } from "socket.io-client";
 
 
 
-const backendUrl=import.meta.env.VITE_BACKEND_URL;
+
+const backendUrl="http://localhost:8080";
 axios.defaults.baseURL=backendUrl;
 
 export const AuthContext=createContext();
@@ -22,10 +24,13 @@ export const AuthProvider=({children})=>{
        const checkAuth=async()=>{
         try {
            const {data}=await axios.get("/api/user/checkAuth")
+           console.log("response from check auth",data)
        
        if(data.success){
            setauthUser(data.user)
-           connectSocket(data.user)
+           console.log("authUser state",authUser)
+         
+             
    
        }
    
@@ -37,26 +42,31 @@ export const AuthProvider=({children})=>{
 
 //connect socket function to handle socet connection and online users updates
 const connectSocket=(userData)=>{
-    if(!userData || socket?.connected)return;
+    if(!userData || socket)return;
 
-    const newSocket=new io(backendUrl,{
+    const newSocket= io(backendUrl,{
         query:{
             userId:userData._id
 
-        }
+        },
     })
 
-    newSocket.on("connect",()=>{
-            setSocket(newSocket);
-        
-    })
+    newSocket.connect();
+    console.log(newSocket)
+    setSocket(newSocket);
+    console.log("socket set to",newSocket)
+    console.log("socket connected",socket)
+   
 
 
 
     newSocket.on("get-online-users",(users)=>{
+        console.log("online users from socket",users)
         setonlineUsers(users)
+      
     
     })
+   
 }
 useEffect(() => {
   if (token) {
@@ -64,7 +74,9 @@ useEffect(() => {
   } else {
     delete axios.defaults.headers.common["Authorization"];
   }
-}, [token]);
+
+  checkAuth();
+}, []);
 
 
 
