@@ -52,18 +52,18 @@ io.on("connection",(socket)=>{
 
 
 connectDb()
-.then(()=>{
-    server.listen(process.env.PORT,()=>{
+  .then(() => {
+    if (process.env.NODE_ENV !== "production") {
+      server.listen(process.env.PORT, () => {
         console.log("database connection successful");
-        
-        console.log(`server is listenin on port  ${process.env.PORT}`);
-        
-    })
-})
-.catch((error)=>{
-    console.log("error connectin to database");
-    
-})
+        console.log(`server is listening on port ${process.env.PORT}`);
+      });
+    }
+  })
+  .catch((error) => {
+    console.log("error connecting to database");
+    console.error(error);
+  });
 
 
 
